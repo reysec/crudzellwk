@@ -14,6 +14,7 @@ MongoClient.connect('mongodb://aang58:P4ssw0rd@ds245228.mlab.com:45228/crudzellw
     })
 })
 
+app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: true}))
 
 // app.listen(3000, function() {
@@ -27,7 +28,10 @@ app.use(bodyParser.urlencoded({extended: true}))
 // Pakai ES6 convention
 app.get('/', (req,res) => {
     // res.send('Hello ES6');
-    res.sendFile(__dirname + '/index.html');
+    db.collection('quotes').find().toArray(function(err, result) {
+        if (err) return console.log(err)
+        res.render('index.ejs', {quotes: result})
+    })
 })
 
 app.post('/quotes', (req, res) => {
