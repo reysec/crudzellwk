@@ -16,6 +16,8 @@ MongoClient.connect('mongodb://aang58:P4ssw0rd@ds245228.mlab.com:45228/crudzellw
 
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(express.static('public'))
+app.use(bodyParser.json())
 
 // app.listen(3000, function() {
 //     console.log('listening on 3000');
@@ -43,4 +45,20 @@ app.post('/quotes', (req, res) => {
     })
 })
 
+app.put('/quotes', (req, res) => {
+    db.collection('quotes').findOneAndUpdate(
+    {   name: 'Naruto'
+    }, {
+        $set: {
+            name: req.body.name,
+            quote: req.body.quote
+        }
+    }, {
+        sort: {_id: -1},
+        upsert: true
+    },  (err, result) => {
+        if (err) return res.send(err)
+        res.send(result)   
+    })
+})
 console.log("Hallo ini nodejs - javascript didalam server");
